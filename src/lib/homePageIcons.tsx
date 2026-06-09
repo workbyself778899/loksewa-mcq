@@ -9,8 +9,10 @@ import {
   FiTrendingUp,
   FiUsers,
   FiZap,
-  type IconType,
+ 
 } from 'react-icons/fi';
+
+import type { IconType } from 'react-icons';
 
 /** Maps stored icon names to react-icons components for the home page */
 const ICON_MAP: Record<string, IconType> = {

@@ -23,7 +23,8 @@ interface QuestionSet {
   _id: string;
   name: string;
   description: string;
-  course: string;
+  course: string | { _id: string };
+  
 }
 
 /**
