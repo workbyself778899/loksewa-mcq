@@ -64,7 +64,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 ${isDark ? 'bg-gray-950' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen flex items-center justify-center px-4 sm:px-6 ${isDark ? 'text-white' : 'text-black'} lg:px-8 ${isDark ? 'bg-gray-950' : 'bg-gray-50'}`}>
       <div className={`w-full max-w-md rounded-lg shadow-lg p-8 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
         {/* Header */}
         <div className="text-center mb-8">

@@ -9,6 +9,7 @@ import '@/models/HomePage';
 
 // MongoDB connection string - use environment variable in production
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/aimcq';
+const db = process.env.db;
 
 // Global variable to store the cached connection
 declare global {
@@ -42,7 +43,9 @@ async function connectDB() {
 
   // Create new connection promise
   global.mongooseConnection.promise = mongoose
-    .connect(MONGODB_URI)
+    .connect(MONGODB_URI,{
+      dbName:db
+    })
     .then((mongoose) => {
       console.log('✓ MongoDB connected successfully');
       return mongoose;
