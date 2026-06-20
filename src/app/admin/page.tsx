@@ -81,7 +81,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Links */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Courses */}
           <Link href="/admin/courses">
             <div
@@ -114,25 +114,6 @@ export default function AdminDashboard() {
                   <h2 className="text-lg font-bold">Question Sets</h2>
                   <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                     Create and manage question sets
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* Questions */}
-          <Link href="/admin/questions">
-            <div
-              className={`p-6 rounded-lg shadow-lg hover:shadow-xl transition cursor-pointer ${
-                isDark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-yellow-50'
-              }`}
-            >
-              <div className="flex items-center gap-4">
-                <FiHelpCircle className="w-12 h-12 text-yellow-500" />
-                <div className="flex-1">
-                  <h2 className="text-lg font-bold">Manage Questions</h2>
-                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    Add MCQ questions with options
                   </p>
                 </div>
               </div>

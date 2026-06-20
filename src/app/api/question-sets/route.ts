@@ -3,6 +3,7 @@ import connectDB from '@/lib/mongodb';
 import QuestionSet from '@/models/QuestionSet';
 import Course from '@/models/Course';
 import User from '@/models/User';
+import Question from '@/models/Question';
 import { extractToken, verifyToken } from '@/utils/jwt';
 
 /**
@@ -26,10 +27,22 @@ export async function GET(request: NextRequest) {
       .populate('createdBy', 'fullName email')
       .sort({ createdAt: -1 });
 
+    // Populate question counts
+    const questionSetsWithCounts = await Promise.all(
+      questionSets.map(async (set) => {
+        const questionCount = await Question.countDocuments({ questionSet: set._id });
+        const doc = set.toObject();
+        return {
+          ...doc,
+          questionCount,
+        };
+      })
+    );
+
     return NextResponse.json(
       {
         message: 'Question sets fetched successfully',
-        questionSets,
+        questionSets: questionSetsWithCounts,
       },
       { status: 200 }
     );

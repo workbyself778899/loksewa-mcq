@@ -16,6 +16,7 @@ interface QuestionSet {
   description: string;
   course: string;
   questions: string[];
+  questionCount?: number;
   createdBy: any;
 }
 
@@ -308,7 +309,7 @@ export default function AdminQuestionSetsPage() {
                       <td className={`px-6 py-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} line-clamp-1`}>
                         {set.description}
                       </td>
-                      <td className="px-6 py-4 text-center">{set.questions?.length || 0}</td>
+                      <td className="px-6 py-4 text-center">{set.questionCount || 0}</td>
                       <td className="px-6 py-4">
                         <div className="flex justify-center gap-2">
                           <button
