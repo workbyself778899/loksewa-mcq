@@ -7,7 +7,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from '@/components/ThemeProvider';
 import { useAuth } from '@/components/AuthProvider';
-import { FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiX, FiUpload, FiCpu, FiAlertTriangle } from 'react-icons/fi';
+import { FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiX, FiUpload, FiCpu, FiAlertTriangle, FiClock } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 interface Question {
@@ -43,6 +43,7 @@ export default function AdminQuestionsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'latest' | 'oldest'>('latest');
 
   const [formData, setFormData] = useState({
     question: '',
@@ -542,7 +543,7 @@ export default function AdminQuestionsPage() {
             <Link href={`/admin/courses/${typeof questionSet?.course === 'string' ? questionSet.course : questionSet?.course?._id}`} className="flex items-center gap-2 text-blue-500 hover:text-blue-600 mb-4">
               <FiArrowLeft /> Back to Question Sets
             </Link>
-            <h1 className="text-3xl font-bold">Questions for {questionSet?.name}</h1>
+            <h1 className="text-3xl font-bold"> {questionSet?.name}</h1>
             <p className={`mt-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{questionSet?.description}</p>
           </div>
           <div className="flex gap-4">
@@ -967,6 +968,48 @@ Answer: D`}
         )}
 
         {/* Questions List */}
+        {/* Sort Filter */}
+        {questions.length > 0 && (
+          <div className="flex items-center gap-3 mb-4">
+            <FiClock className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+            <span className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Sort by:</span>
+            <div className={`flex rounded-lg overflow-hidden border ${
+              isDark ? 'border-gray-700' : 'border-gray-200'
+            }`}>
+              <button
+                onClick={() => setSortOrder('latest')}
+                className={`px-4 py-1.5 text-sm font-medium transition ${
+                  sortOrder === 'latest'
+                    ? isDark
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-blue-500 text-white'
+                    : isDark
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                Latest
+              </button>
+              <button
+                onClick={() => setSortOrder('oldest')}
+                className={`px-4 py-1.5 text-sm font-medium transition border-l ${
+                  isDark ? 'border-gray-700' : 'border-gray-200'
+                } ${
+                  sortOrder === 'oldest'
+                    ? isDark
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-blue-500 text-white'
+                    : isDark
+                    ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-white text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                Oldest First
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-4">
           {questions.length === 0 ? (
             <div
@@ -975,7 +1018,13 @@ Answer: D`}
               <p className={isDark ? 'text-gray-400' : 'text-gray-600'}>No questions yet. Add your first question!</p>
             </div>
           ) : (
-            questions.map((question, idx) => (
+            [...questions]
+              .sort((a, b) => {
+                const timeA = parseInt(a._id.substring(0, 8), 16);
+                const timeB = parseInt(b._id.substring(0, 8), 16);
+                return sortOrder === 'latest' ? timeB - timeA : timeA - timeB;
+              })
+              .map((question, idx) => (
               <div
                 key={question._id}
                 className={`rounded-lg p-6 ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-lg`}

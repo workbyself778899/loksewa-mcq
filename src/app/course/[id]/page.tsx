@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from '@/components/ThemeProvider';
 import { useAuth } from '@/components/AuthProvider';
-import { FiArrowLeft, FiFileText, FiPlayCircle } from 'react-icons/fi';
+import { FiArrowLeft, FiFileText, FiPlayCircle, FiClock } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 interface Course {
@@ -37,6 +37,7 @@ export default function CoursePage() {
   const [course, setCourse] = useState<Course | null>(null);
   const [questionSets, setQuestionSets] = useState<QuestionSet[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState<'latest' | 'oldest'>('latest');
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -109,7 +110,51 @@ export default function CoursePage() {
 
             {/* Question Sets */}
             <div>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-8">Available Question Sets</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <h2 className="text-3xl sm:text-4xl font-bold">Available Question Sets</h2>
+
+                {/* Sort Filter */}
+                {questionSets.length > 0 && (
+                  <div className="flex items-center gap-3">
+                    <FiClock className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+                    <span className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Sort by:</span>
+                    <div className={`flex rounded-lg overflow-hidden border ${
+                      isDark ? 'border-gray-700' : 'border-gray-200'
+                    }`}>
+                      <button
+                        onClick={() => setSortOrder('latest')}
+                        className={`px-4 py-1.5 text-sm font-medium transition ${
+                          sortOrder === 'latest'
+                            ? isDark
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-blue-500 text-white'
+                            : isDark
+                            ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                            : 'bg-white text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        Latest
+                      </button>
+                      <button
+                        onClick={() => setSortOrder('oldest')}
+                        className={`px-4 py-1.5 text-sm font-medium transition border-l ${
+                          isDark ? 'border-gray-700' : 'border-gray-200'
+                        } ${
+                          sortOrder === 'oldest'
+                            ? isDark
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-blue-500 text-white'
+                            : isDark
+                            ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                            : 'bg-white text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        Oldest First
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {questionSets.length === 0 ? (
                 <div className={`p-12 rounded-lg text-center border-2 border-dashed ${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-100 border-gray-300'}`}>
@@ -123,7 +168,13 @@ export default function CoursePage() {
                 </div>
               ) : (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {questionSets.map((set) => (
+                  {[...questionSets]
+                    .sort((a, b) => {
+                      const timeA = parseInt(a._id.substring(0, 8), 16);
+                      const timeB = parseInt(b._id.substring(0, 8), 16);
+                      return sortOrder === 'latest' ? timeB - timeA : timeA - timeB;
+                    })
+                    .map((set) => (
                     <Link key={set._id} href={`/test/${set._id}`}>
                       <div
                         className={`group rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer ${

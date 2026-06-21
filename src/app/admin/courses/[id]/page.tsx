@@ -7,7 +7,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from '@/components/ThemeProvider';
 import { useAuth } from '@/components/AuthProvider';
-import { FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiX } from 'react-icons/fi';
+import { FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiX, FiClock } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 interface QuestionSet {
@@ -17,6 +17,7 @@ interface QuestionSet {
   course: string;
   questions: string[];
   questionCount?: number;
+  createdAt?: string;
   createdBy: any;
 }
 
@@ -41,6 +42,7 @@ export default function AdminQuestionSetsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingSet, setEditingSet] = useState<QuestionSet | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'latest' | 'oldest'>('latest');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -285,6 +287,46 @@ export default function AdminQuestionSetsPage() {
           </div>
         )}
 
+        {/* Sort Filter */}
+        <div className="flex items-center gap-3 mb-4">
+          <FiClock className={`w-4 h-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
+          <span className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Sort by:</span>
+          <div className={`flex rounded-lg overflow-hidden border ${
+            isDark ? 'border-gray-700' : 'border-gray-200'
+          }`}>
+            <button
+              onClick={() => setSortOrder('latest')}
+              className={`px-4 py-1.5 text-sm font-medium transition ${
+                sortOrder === 'latest'
+                  ? isDark
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-blue-500 text-white'
+                  : isDark
+                  ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              Latest
+            </button>
+            <button
+              onClick={() => setSortOrder('oldest')}
+              className={`px-4 py-1.5 text-sm font-medium transition border-l ${
+                isDark ? 'border-gray-700' : 'border-gray-200'
+              } ${
+                sortOrder === 'oldest'
+                  ? isDark
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-blue-500 text-white'
+                  : isDark
+                  ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  : 'bg-white text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              Oldest First
+            </button>
+          </div>
+        </div>
+
         {/* Question Sets List */}
         <div className={`rounded-lg shadow-lg overflow-hidden ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
           {questionSets.length === 0 ? (
@@ -303,7 +345,14 @@ export default function AdminQuestionSetsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {questionSets.map((set) => (
+                  {[...questionSets]
+                    .sort((a, b) => {
+                      // Extract timestamp from MongoDB ObjectId (first 8 hex chars = 4-byte timestamp)
+                      const timeA = parseInt(a._id.substring(0, 8), 16);
+                      const timeB = parseInt(b._id.substring(0, 8), 16);
+                      return sortOrder === 'latest' ? timeB - timeA : timeA - timeB;
+                    })
+                    .map((set) => (
                     <tr key={set._id} className={`border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                       <td className="px-6 py-4 font-semibold">{set.name}</td>
                       <td className={`px-6 py-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'} line-clamp-1`}>
