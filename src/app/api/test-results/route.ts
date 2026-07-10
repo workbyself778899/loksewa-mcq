@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
 
     await connectDB();
 
-    const { questionSetId, answers, timeSpent } = await request.json();
+    const { questionSetId, answers, timeSpent, notes, generalNotes } = await request.json();
 
     // Validate required fields
     if (!questionSetId || !answers || !Array.isArray(answers)) {
@@ -157,11 +157,16 @@ export async function POST(request: NextRequest) {
     const totalMarks = questions.length * marksPerQuestion;
     const percentage = (score / totalMarks) * 100;
 
+    const finalNotes = notes || new Array(questions.length).fill('');
+    const finalGeneralNotes = generalNotes || '';
+
     // Create test result
     const testResult = new TestResult({
       user: payload.userId,
       questionSet: questionSetId,
       answers,
+      notes: finalNotes,
+      generalNotes: finalGeneralNotes,
       score,
       totalMarks,
       totalQuestions: questions.length,
@@ -178,7 +183,7 @@ export async function POST(request: NextRequest) {
     await testResult.save();
 
     // Include answer review only after submission (not exposed during the test)
-    const review = buildTestReview(questions, answers);
+    const review = buildTestReview(questions, answers, finalNotes);
 
     return NextResponse.json(
       {
@@ -195,6 +200,7 @@ export async function POST(request: NextRequest) {
           negativeMarks,
           percentage: percentage.toFixed(2),
           timeSpent,
+          generalNotes: finalGeneralNotes,
         },
         review,
       },

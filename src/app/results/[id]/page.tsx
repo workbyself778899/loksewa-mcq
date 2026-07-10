@@ -7,7 +7,7 @@ import { useTheme } from '@/components/ThemeProvider';
 import { useAuth } from '@/components/AuthProvider';
 import TestAnswerReview from '@/components/TestAnswerReview';
 import type { TestReviewItem } from '@/lib/buildTestReview';
-import { FiArrowLeft, FiClock } from 'react-icons/fi';
+import { FiArrowLeft, FiClock, FiFileText } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 interface ResultSummary {
@@ -20,6 +20,7 @@ interface ResultSummary {
   timeSpent: number;
   completedAt: string;
   questionSet: { _id: string; name: string };
+  generalNotes?: string;
 }
 
 /**
@@ -139,6 +140,21 @@ export default function ResultReviewPage() {
             </span>
           </div>
         </div>
+
+        {summary.generalNotes && (
+          <div
+            className={`rounded-lg shadow-lg p-6 mb-8 border ${
+              isDark
+                ? 'bg-yellow-950/20 border-yellow-800/40 text-yellow-100'
+                : 'bg-yellow-50 border-yellow-200 text-yellow-900'
+            }`}
+          >
+            <h2 className="text-lg font-bold mb-2 flex items-center gap-2">
+              <FiFileText className="text-yellow-500" /> General Test Notes / Scratchpad
+            </h2>
+            <p className="whitespace-pre-wrap text-sm">{summary.generalNotes}</p>
+          </div>
+        )}
 
         <TestAnswerReview review={review} isDark={isDark} />
       </div>

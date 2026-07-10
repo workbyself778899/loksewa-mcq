@@ -140,6 +140,20 @@ export default function TestAnswerReview({ review, isDark }: TestAnswerReviewPro
               <p>{item.explanation}</p>
             </div>
           )}
+
+          {/* Optional User Note */}
+          {item.userNote && (
+            <div
+              className={`mt-3 ml-0 sm:ml-11 p-3 rounded-lg text-sm border ${
+                isDark
+                  ? 'bg-yellow-950/20 border-yellow-850/40 text-yellow-200'
+                  : 'bg-yellow-50 border-yellow-200 text-yellow-850'
+              }`}
+            >
+              <p className="font-semibold mb-1">Your Note for this Question</p>
+              <p className="whitespace-pre-wrap">{item.userNote}</p>
+            </div>
+          )}
         </div>
       ))}
     </div>

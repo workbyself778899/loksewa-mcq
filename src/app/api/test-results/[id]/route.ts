@@ -57,7 +57,7 @@ export async function GET(
       questionSet: testResult.questionSet._id,
     }).sort({ createdAt: 1 });
 
-    const review = buildTestReview(questions, testResult.answers);
+    const review = buildTestReview(questions, testResult.answers, testResult.notes);
 
     return NextResponse.json(
       {
@@ -76,6 +76,7 @@ export async function GET(
           timeSpent: testResult.timeSpent,
           completedAt: testResult.completedAt,
           questionSet: testResult.questionSet,
+          generalNotes: testResult.generalNotes || '',
         },
         review,
       },

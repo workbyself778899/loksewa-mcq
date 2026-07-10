@@ -5,6 +5,8 @@ export interface ITestResult extends Document {
   user: Types.ObjectId; // User ID
   questionSet: Types.ObjectId; // QuestionSet ID
   answers: number[]; // Array of user's selected answer indices
+  notes: string[]; // Array of notes for each question
+  generalNotes?: string; // General test notes
   score: number; // Score obtained
   totalMarks: number; // Total marks possible
   totalQuestions: number;
@@ -84,6 +86,14 @@ const testResultSchema = new Schema<ITestResult>(
     timeSpent: {
       type: Number,
       default: 0, // Time spent in seconds
+    },
+    notes: {
+      type: [String],
+      default: [],
+    },
+    generalNotes: {
+      type: String,
+      default: '',
     },
     completedAt: {
       type: Date,

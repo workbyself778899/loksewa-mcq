@@ -52,6 +52,15 @@ export default function Navbar() {
               Home
             </Link>
 
+            <Link
+              href="/notes"
+              className={`hover:text-blue-500 transition ${
+                isDark ? 'hover:text-blue-400' : ''
+              }`}
+            >
+              Notes
+            </Link>
+
             {isAuthenticated && (
               <>
                 <Link
@@ -170,6 +179,18 @@ export default function Navbar() {
               }`}
             >
               Home
+            </Link>
+
+            <Link
+              href="/notes"
+              onClick={closeMobileMenu}
+              className={`block px-4 py-2 rounded-lg transition ${
+                isDark
+                  ? 'hover:bg-gray-700'
+                  : 'hover:bg-gray-200'
+              }`}
+            >
+              Notes
             </Link>
 
             {isAuthenticated && (

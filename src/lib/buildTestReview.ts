@@ -10,6 +10,7 @@ export interface TestReviewItem {
   explanation: string;
   userAnswer: number;
   isCorrect: boolean;
+  userNote?: string;
 }
 
 export function buildTestReview(
@@ -20,7 +21,8 @@ export function buildTestReview(
     correctAnswer: number;
     explanation?: string;
   }>,
-  answers: number[]
+  answers: number[],
+  notes?: string[]
 ): TestReviewItem[] {
   return questions.map((question, index) => {
     const userAnswer = answers[index] ?? -1;
@@ -32,6 +34,7 @@ export function buildTestReview(
       explanation: question.explanation || '',
       userAnswer,
       isCorrect: userAnswer === question.correctAnswer,
+      userNote: notes ? (notes[index] || '') : '',
     };
   });
 }
