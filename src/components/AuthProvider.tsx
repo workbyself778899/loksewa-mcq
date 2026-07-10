@@ -1,6 +1,39 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import toast from 'react-hot-toast';
+
+/**
+ * Decode JWT payload without a library (client-side only).
+ * Returns the parsed payload object or null if decoding fails.
+ */
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  try {
+    const base64Url = token.split('.')[1];
+    if (!base64Url) return null;
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Check whether a JWT token has expired by comparing its `exp` claim
+ * against the current time. Returns true if expired or unreadable.
+ */
+function isTokenExpired(token: string): boolean {
+  const payload = decodeJwtPayload(token);
+  if (!payload || typeof payload.exp !== 'number') return true;
+  // exp is in seconds, Date.now() is in milliseconds
+  return Date.now() >= payload.exp * 1000;
+}
 
 /**
  * Context for managing user authentication state
@@ -34,14 +67,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load user from localStorage on mount
+  // Load user from localStorage on mount — reject expired tokens immediately
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
 
     if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+      if (isTokenExpired(savedToken)) {
+        // Token already expired — clear stale session
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      } else {
+        setToken(savedToken);
+        setUser(JSON.parse(savedUser));
+      }
     }
     setIsLoading(false);
   }, []);
@@ -101,12 +140,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Logout function
-  const logout = () => {
+  const logout = useCallback(() => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-  };
+  }, []);
+
+  // Periodically check token expiration and auto-logout
+  useEffect(() => {
+    if (!token) return;
+
+    // Immediate check
+    if (isTokenExpired(token)) {
+      logout();
+      toast.error('Your session has expired. Please log in again.');
+      return;
+    }
+
+    // Set up interval to check every 5 seconds
+    const intervalId = setInterval(() => {
+      if (isTokenExpired(token)) {
+        logout();
+        toast.error('Your session has expired. Please log in again.');
+      }
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [token, logout]);
 
   return (
     <AuthContext.Provider
