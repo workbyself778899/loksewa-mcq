@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "MCQ Platform - Test Your Knowledge",
   description: "A comprehensive MCQ platform to test your knowledge with admin dashboard",
+  icons: {
+    icon: "/Logo.png",
+  },
 };
 
 export default function RootLayout({

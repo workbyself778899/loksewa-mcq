@@ -17,6 +17,7 @@ interface Course {
   image: string;
 }
 
+
 /**
  * Public home page — content driven by admin Home Page Builder
  */
@@ -68,39 +69,34 @@ export default function Home() {
     <div className={isDark ? 'bg-gray-950' : 'bg-gray-50'}>
       {/* Hero */}
       <section
-        className={`relative overflow-hidden py-16 sm:py-24 px-4 sm:px-6 lg:px-8 ${
-          isDark
-            ? 'bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900'
-            : 'bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50'
-        }`}
+        className={`relative overflow-hidden py-16 sm:py-24 px-4 sm:px-6 lg:px-8 ${isDark
+          ? 'bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900'
+          : 'bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50'
+          }`}
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
-            className={`absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl opacity-20 ${
-              isDark ? 'bg-blue-600' : 'bg-blue-300'
-            }`}
+            className={`absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl opacity-20 ${isDark ? 'bg-blue-600' : 'bg-blue-300'
+              }`}
           />
           <div
-            className={`absolute -bottom-40 -left-40 w-80 h-80 rounded-full blur-3xl opacity-20 ${
-              isDark ? 'bg-purple-600' : 'bg-purple-300'
-            }`}
+            className={`absolute -bottom-40 -left-40 w-80 h-80 rounded-full blur-3xl opacity-20 ${isDark ? 'bg-purple-600' : 'bg-purple-300'
+              }`}
           />
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div
-            className={`flex flex-col gap-10 items-center ${
-              home.showHeroImage && home.heroImage
-                ? 'lg:flex-row lg:text-left lg:items-center'
-                : 'text-center'
-            }`}
+            className={`flex flex-col gap-10 items-center ${home.showHeroImage && home.heroImage
+              ? 'lg:flex-row lg:text-left lg:items-center'
+              : 'text-center'
+              }`}
           >
             <div className={home.showHeroImage && home.heroImage ? 'flex-1' : 'w-full'}>
               {home.tagline && (
                 <p
-                  className={`text-sm sm:text-base font-semibold tracking-wide uppercase mb-4 ${
-                    isDark ? 'text-blue-300' : 'text-blue-600'
-                  }`}
+                  className={`text-sm sm:text-base font-semibold tracking-wide uppercase mb-4 ${isDark ? 'text-blue-300' : 'text-blue-600'
+                    }`}
                 >
                   {home.tagline}
                 </p>
@@ -109,37 +105,33 @@ export default function Home() {
                 {home.title}
               </h1>
               <p
-                className={`text-lg sm:text-xl max-w-3xl mb-8 leading-relaxed ${
-                  home.showHeroImage && home.heroImage ? '' : 'mx-auto'
-                } ${isDark ? 'text-gray-200' : 'text-gray-700'}`}
+                className={`text-lg sm:text-xl max-w-3xl mb-8 leading-relaxed ${home.showHeroImage && home.heroImage ? '' : 'mx-auto'
+                  } ${isDark ? 'text-gray-200' : 'text-gray-700'}`}
               >
                 {home.description}
               </p>
               <div
-                className={`flex flex-col sm:flex-row gap-4 ${
-                  home.showHeroImage && home.heroImage ? '' : 'justify-center'
-                }`}
+                className={`flex flex-col sm:flex-row gap-4 ${home.showHeroImage && home.heroImage ? '' : 'justify-center'
+                  }`}
               >
                 <Link
                   href={primaryHref}
-                  className={`px-8 sm:px-10 py-4 rounded-lg font-bold text-lg transition flex items-center justify-center gap-3 shadow-lg hover:shadow-xl ${
-                    isDark
-                      ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
-                      : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white'
-                  }`}
+                  className={`px-8 sm:px-10 py-4 rounded-lg font-bold text-lg transition flex items-center justify-center gap-3 shadow-lg hover:shadow-xl ${isDark
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white'
+                    : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white'
+                    }`}
                 >
                   {primaryText} <FiArrowRight className="w-5 h-5" />
                 </Link>
                 {showSecondary && (
                   <Link
                     href={secondaryHref}
-                    className={`px-8 sm:px-10 py-4 rounded-lg font-bold text-lg text-center transition ${
-                      isDark
-                        ? 'bg-gray-700 hover:bg-gray-600 text-white border-2 border-gray-600'
-                        : 'bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-300'
-                    }`}
+                    className={`px-8 sm:px-10 py-4 rounded-lg font-bold text-lg text-center transition ${isDark
+                      ? 'bg-gray-700 hover:bg-gray-600 text-white border-2 border-gray-600'
+                      : 'bg-white hover:bg-gray-50 text-gray-900 border-2 border-gray-300'
+                      }`}
                   >
-                    {home.secondaryCtaText} 
+                    {home.secondaryCtaText}
                   </Link>
                 )}
               </div>
@@ -197,16 +189,14 @@ export default function Home() {
               {enabledFeatures.map((feature, i) => (
                 <div
                   key={i}
-                  className={`p-6 sm:p-8 rounded-xl border-2 hover:shadow-lg transition ${
-                    isDark
-                      ? 'bg-gray-800 border-gray-700 hover:border-blue-500'
-                      : 'bg-gray-50 border-gray-200 hover:border-blue-500'
-                  }`}
+                  className={`p-6 sm:p-8 rounded-xl border-2 hover:shadow-lg transition ${isDark
+                    ? 'bg-gray-800 border-gray-700 hover:border-blue-500'
+                    : 'bg-gray-50 border-gray-200 hover:border-blue-500'
+                    }`}
                 >
                   <div
-                    className={`w-14 h-14 rounded-lg flex items-center justify-center mb-4 ${
-                      isDark ? 'bg-blue-900/50' : 'bg-blue-100'
-                    }`}
+                    className={`w-14 h-14 rounded-lg flex items-center justify-center mb-4 ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'
+                      }`}
                   >
                     <HomePageIcon name={feature.icon} className="w-7 h-7 text-blue-500" />
                   </div>
@@ -223,21 +213,19 @@ export default function Home() {
       {enabledPromos.map((promo, index) => (
         <section
           key={index}
-          className={`py-16 sm:py-20 px-4 sm:px-6 ${isDark ? 'text-white' : 'text-gray-600'} lg:px-8 ${
-            index % 2 === 0
-              ? isDark
-                ? 'bg-gray-950'
-                : 'bg-gray-50'
-              : isDark
+          className={`py-16 sm:py-20 px-4 sm:px-6 ${isDark ? 'text-white' : 'text-gray-600'} lg:px-8 ${index % 2 === 0
+            ? isDark
+              ? 'bg-gray-950'
+              : 'bg-gray-50'
+            : isDark
               ? 'bg-gray-900'
               : 'bg-white'
-          }`}
+            }`}
         >
           <div className="max-w-7xl mx-auto">
             <div
-              className={`flex flex-col gap-10 items-center ${
-                promo.image ? 'lg:flex-row' : ''
-              } ${promo.imagePosition === 'left' && promo.image ? 'lg:flex-row-reverse' : ''}`}
+              className={`flex flex-col gap-10 items-center ${promo.image ? 'lg:flex-row' : ''
+                } ${promo.imagePosition === 'left' && promo.image ? 'lg:flex-row-reverse' : ''}`}
             >
               <div className="flex-1 w-full">
                 {promo.subtitle && (
@@ -252,11 +240,10 @@ export default function Home() {
                 {promo.buttonText && promo.buttonLink && (
                   <Link
                     href={promo.buttonLink}
-                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition ${
-                      isDark
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
-                    }`}
+                    className={`inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition ${isDark
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                      : 'bg-blue-500 hover:bg-blue-600 text-white'
+                      }`}
                   >
                     {promo.buttonText} <FiArrowRight />
                   </Link>
@@ -298,9 +285,8 @@ export default function Home() {
             {user?.role === 'admin' && (
               <Link
                 href="/admin/courses"
-                className={`px-6 py-3 rounded-lg font-semibold text-center whitespace-nowrap ${
-                  isDark ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-green-500 hover:bg-green-600 text-white'
-                }`}
+                className={`px-6 py-3 rounded-lg font-semibold text-center whitespace-nowrap ${isDark ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-green-500 hover:bg-green-600 text-white'
+                  }`}
               >
                 + Add Course
               </Link>
@@ -314,9 +300,8 @@ export default function Home() {
             </div>
           ) : courses.length === 0 ? (
             <div
-              className={`text-center py-16 rounded-lg border-2 border-dashed ${
-                isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-300 bg-gray-100'
-              }`}
+              className={`text-center py-16 rounded-lg border-2 border-dashed ${isDark ? 'border-gray-700 bg-gray-800/50' : 'border-gray-300 bg-gray-100'
+                }`}
             >
               <FiBook className={`w-16 h-16 mx-auto mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} />
               <p className={`text-xl font-semibold ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
@@ -328,9 +313,8 @@ export default function Home() {
               {courses.map((course) => (
                 <Link key={course._id} href={`/course/${course._id}`}>
                   <div
-                    className={`group h-full rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${
-                      isDark ? 'bg-gray-800' : 'bg-white'
-                    }`}
+                    className={`group h-full rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 ${isDark ? 'bg-gray-800' : 'bg-white'
+                      }`}
                   >
                     <div className="relative h-48 sm:h-56 bg-gradient-to-br from-blue-400 to-purple-600 overflow-hidden">
                       {course.image ? (
@@ -366,11 +350,10 @@ export default function Home() {
 
       {/* Bottom CTA */}
       <section
-        className={`py-16 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden ${
-          isDark
-            ? 'bg-gradient-to-r from-blue-900 via-purple-900 to-pink-900'
-            : 'bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500'
-        }`}
+        className={`py-16 sm:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden ${isDark
+          ? 'bg-gradient-to-r from-blue-900 via-purple-900 to-pink-900'
+          : 'bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500'
+          }`}
       >
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">{home.ctaTitle}</h2>
